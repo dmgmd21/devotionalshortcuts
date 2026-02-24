@@ -1202,7 +1202,7 @@ function finish() {
   const prayed = queue.slice(0, round);
   const names = [...new Set(prayed.map(p=>p.name))];
   document.getElementById('completeMsg').textContent =
-    `You prayed for ${names.length} ${names.length===1?'person':'people'} today. That's what dads who lead do.`;
+    `You prayed for ${names.length} ${names.length===1?'person':'people'} today. To pray for someone else is the holy combination of compassion and hope. --Tyler Staton`;
 
   if(names.length) {
     document.getElementById('completePills').innerHTML = names.map(n=>`<span class="complete-name-pill">${esc(n)}</span>`).join('');
