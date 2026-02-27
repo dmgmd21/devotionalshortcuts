@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Intercede">
+<title>Intercede · Base Camp 322</title>
+
+<!-- Link Preview (Open Graph) -->
+<meta property="og:title" content="🏔️ Intercede" />
+<meta property="og:description" content="When you say 'I'll pray for you.' — now you mean it. A guided intercessory prayer app." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://dmgmd21.github.io/devotionalshortcuts/intercede-bc322.html" />
+<meta property="og:image" content="https://dmgmd21.github.io/devotionalshortcuts/intercede-preview.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:site_name" content="Intercede" />
+
+<!-- Twitter/X Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="🏔️ Intercede" />
+<meta name="twitter:description" content="When you say 'I'll pray for you.' — now you mean it." />
+<meta name="twitter:image" content="https://dmgmd21.github.io/devotionalshortcuts/intercede-preview.png" />
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:       #0d1f3c;
+  --navy-dark:  #081529;
+  --navy-mid:   #122240;
+  --navy-light: #1a3358;
+  --accent:     #5ba4cf;
+  --accent-hot: #7bbfe8;
+  --accent-dim: #3a7aab;
+  --accent-glow:rgba(91,164,207,0.25);
+  --slate:      #4a7090;
+  --mist:       rgba(255,255,255,0.06);
+  --mist2:      rgba(255,255,255,0.1);
+  --white:      #eef4f8;
+  --white-dim:  rgba(238,244,248,0.6);
+  --white-faint:rgba(238,244,248,0.25);
+  --font: 'Open Sans', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  height: 100%;
+  background: var(--navy-dark);
+  color: var(--white);
+  font-family: var(--font);
+  overflow: hidden;
+}
+
+/* ── GRADIENT BACKGROUND ── */
+body {
+  background: linear-gradient(160deg, #7ec8e3 0%, #3a8fbf 18%, #1a4a7a 45%, #081529 100%);
+  background-attachment: fixed;
+}
+
+/* Grain overlay */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.5;
+}
+
+#app {
+  position: relative;
+  z-index: 10;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: env(safe-area-inset-top, 0px) 0 env(safe-area-inset-bottom, 0px);
+  overflow: hidden;
+}
+
+/* ── HEADER BAR ── */
+.top-bar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px 12px;
+  background: linear-gradient(to bottom, rgba(8,21,41,0.95), transparent);
+}
+
+.logo-mark {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.logo-emoji {
+  font-size: 22px;
+  line-height: 1;
+}
+.logo-text {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--white);
+}
+
+/* ── MUSIC CONTROL ── */
+.music-pod {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(8,21,41,0.7);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 20px;
+  padding: 5px 8px 5px 10px;
+}
+.music-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--white-dim);
+  text-transform: uppercase;
+}
+.music-btns {
+  display: flex;
+  gap: 3px;
+}
+.mbtn {
+  padding: 4px 8px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--white-faint);
+  font-family: var(--font);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+}
+.mbtn.active {
+  background: var(--accent);
+  color: var(--white);
+  border-color: var(--accent-hot);
+}
+.mbtn:hover:not(.active) {
+  background: var(--mist2);
+  color: var(--white);
+}
+
+/* ── SCROLL CONTAINER ── */
+.scroll-area {
+  flex: 1;
+  width: 100%;
+  max-width: 440px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0 20px 30px;
+  scrollbar-width: none;
+}
+.scroll-area::-webkit-scrollbar { display: none; }
+
+/* ── SCREENS ── */
+.screen { display: none; width: 100%; animation: slideUp 0.4s cubic-bezier(0.22,1,0.36,1) forwards; }
+.screen.active { display: block; }
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── HOME ── */
+.hero-card {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 0 0 20px;
+  height: 160px;
+  background: linear-gradient(135deg, #7ec8e3 0%, #2e7ab5 45%, #0d1f3c 100%);
+}
+.hero-card-art {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to top, rgba(8,21,41,0.85) 0%, rgba(8,21,41,0.1) 60%, transparent 100%);
+  z-index: 2;
+}
+.hero-card-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px 18px;
+  z-index: 3;
+}
+.hero-tagline {
+  font-size: 13px;
+  font-weight: 600;
+  font-style: italic;
+  color: rgba(240,236,228,0.85);
+  margin-bottom: 6px;
+  line-height: 1.4;
+  letter-spacing: 0.2px;
+}
+.hero-title {
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--white);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* ── SECTION LABEL ── */
+.sect-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--slate);
+  margin-bottom: 10px;
+  margin-top: 4px;
+}
+
+/* ── ROUNDS CARD ── */
+.rounds-card {
+  background: var(--navy-mid);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 16px 18px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.rounds-info { flex: 1; }
+.rounds-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 2px;
+}
+.rounds-sub {
+  font-size: 12px;
+  color: var(--white-dim);
+  font-weight: 400;
+}
+.rounds-ctl {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.rnd-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.15);
+  background: var(--mist);
+  color: var(--white);
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+  line-height: 1;
+}
+.rnd-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-glow); }
+.rnd-btn:active { transform: scale(0.92); }
+.rnd-num {
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--accent);
+  min-width: 40px;
+  text-align: center;
+  line-height: 1;
+}
+
+/* ── BUTTONS ── */
+.btn-primary {
+  width: 100%;
+  padding: 16px;
+  border-radius: 6px;
+  border: none;
+  background: var(--accent);
+  color: var(--white);
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 10px;
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.1), transparent);
+  pointer-events: none;
+}
+.btn-primary:hover { background: var(--accent-hot); box-shadow: 0 4px 24px var(--accent-glow); transform: translateY(-1px); }
+.btn-primary:active { transform: translateY(0) scale(0.98); }
+.btn-primary:disabled { opacity: 0.35; cursor: not-allowed; transform: none; box-shadow: none; }
+
+.btn-ghost {
+  width: 100%;
+  padding: 14px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: transparent;
+  color: var(--white-dim);
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 8px;
+}
+.btn-ghost:hover { border-color: var(--accent); color: var(--white); background: var(--accent-glow); }
+
+/* ── NO PRAYERS MSG ── */
+.empty-prompt {
+  background: var(--navy-mid);
+  border: 1px dashed rgba(91,164,207,0.4);
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  margin-bottom: 14px;
+}
+.empty-prompt p {
+  font-size: 13px;
+  color: var(--white-dim);
+  line-height: 1.5;
+}
+.empty-prompt strong { color: var(--accent); font-weight: 700; }
+
+/* ── LIST SCREEN ── */
+.screen-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-top: 4px;
+}
+.btn-back {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: var(--mist);
+  color: var(--white);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.btn-back:hover { border-color: var(--accent); color: var(--accent); }
+.screen-title {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--white);
+}
+.count-badge {
+  background: var(--accent);
+  color: var(--white);
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 12px;
+  margin-left: auto;
+}
+
+.add-card {
+  background: var(--navy-mid);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 14px;
+  margin-bottom: 16px;
+}
+.input-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.input-row:last-child { margin-bottom: 0; }
+.field {
+  flex: 1;
+  background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 5px;
+  color: var(--white);
+  font-family: var(--font);
+  font-size: 15px;
+  font-weight: 400;
+  padding: 11px 13px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.field::placeholder { color: rgba(255,255,255,0.25); }
+.field:focus { border-color: var(--accent); }
+.btn-add-item {
+  padding: 11px 16px;
+  border-radius: 5px;
+  border: none;
+  background: var(--accent);
+  color: var(--white);
+  font-size: 22px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+  line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+}
+.btn-add-item:hover { background: var(--accent-hot); }
+
+.prayer-list-wrap {
+  max-height: calc(100vh - 380px);
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.prayer-list-wrap::-webkit-scrollbar { display: none; }
+
+.prayer-item {
+  display: flex;
+  align-items: center;
+  padding: 13px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  gap: 12px;
+  animation: slideUp 0.25s ease forwards;
+}
+.prayer-item:last-child { border-bottom: none; }
+.prayer-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.prayer-text { flex: 1; }
+.prayer-name { font-size: 15px; font-weight: 700; color: var(--white); }
+.prayer-note { font-size: 12px; color: var(--white-dim); margin-top: 2px; line-height: 1.4; }
+.btn-remove {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.2);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  line-height: 1;
+}
+.btn-remove:hover { color: #7090e0; background: rgba(224,112,112,0.1); }
+
+.list-empty {
+  text-align: center;
+  padding: 30px 0;
+  color: var(--white-dim);
+  font-size: 14px;
+}
+
+/* ── SESSION SCREEN ── */
+#prayerScreen { text-align: center; padding-top: 8px; }
+
+.session-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.sess-prog-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--slate);
+}
+.sess-skip {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 5px;
+  color: var(--white-dim);
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.sess-skip:hover { border-color: var(--accent); color: var(--white); }
+
+.progress-track {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 28px;
+  justify-content: center;
+}
+.pbar {
+  height: 4px;
+  flex: 1;
+  max-width: 36px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  transition: all 0.4s;
+}
+.pbar.active {
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+.pbar.done { background: rgba(91,164,207,0.4); }
+
+/* Name display */
+.name-card {
+  background: var(--navy-mid);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 20px 18px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.name-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: var(--accent);
+  border-radius: 2px 0 0 2px;
+}
+.name-card-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.name-card-name {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--white);
+  line-height: 1.1;
+  animation: nameIn 0.5s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+@keyframes nameIn {
+  from { opacity: 0; transform: translateX(-12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.name-card-note {
+  font-size: 14px;
+  color: var(--white-dim);
+  margin-top: 8px;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+/* Timer */
+.timer-wrap {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin: 0 auto 20px;
+}
+.timer-wrap svg { transform: rotate(-90deg); }
+.timer-track { stroke: rgba(255,255,255,0.07); }
+.timer-fill {
+  stroke: var(--accent);
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 8px rgba(212,83,42,0.6));
+  transition: stroke-dashoffset 1s linear;
+}
+.timer-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.timer-num {
+  font-size: 40px;
+  font-weight: 800;
+  color: var(--white);
+  line-height: 1;
+}
+.timer-unit {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--slate);
+  margin-top: 2px;
+}
+
+.sess-status {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--white-dim);
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+  min-height: 20px;
+}
+
+.sess-end {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 5px;
+  color: var(--white-dim);
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 10px 24px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.sess-end:hover { border-color: rgba(255,255,255,0.3); color: var(--white); }
+
+/* ── COMPLETE ── */
+#completeScreen { text-align: center; padding-top: 20px; }
+.complete-icon { font-size: 48px; margin-bottom: 16px; }
+.complete-title {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+.complete-sub {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--slate);
+  margin-bottom: 20px;
+}
+.complete-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-dim), transparent);
+  margin: 16px 0 20px;
+  position: relative;
+}
+.complete-divider::after {
+  content: '✦';
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%,-50%);
+  font-size: 10px;
+  color: var(--accent);
+  background: var(--navy-dark);
+  padding: 0 8px;
+}
+.complete-msg {
+  font-size: 15px;
+  color: var(--white-dim);
+  line-height: 1.7;
+  margin-bottom: 28px;
+  font-weight: 400;
+}
+.complete-names {
+  background: var(--navy-mid);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+.complete-names-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+.complete-name-pill {
+  display: inline-block;
+  background: rgba(91,164,207,0.15);
+  border: 1px solid rgba(91,164,207,0.3);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--white);
+  margin: 3px;
+}
+/* ── REGISTRATION SCREEN ── */
+#regScreen {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  overflow: hidden;
+  background: #0a1a2e;
+}
+
+.reg-hero {
+  position: absolute;
+  inset: 0;
+  background-image: url('VS-Glacier-national-park.jpg');
+  background-size: cover;
+  background-position: center 30%;
+  z-index: 1;
+}
+.reg-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(10,26,46,0.15) 0%,
+    rgba(10,26,46,0.4)  40%,
+    rgba(10,26,46,0.92) 72%,
+    rgba(10,26,46,1)    100%
+  );
+  z-index: 2;
+}
+
+.reg-content {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: 440px;
+  padding: 0 24px calc(env(safe-area-inset-bottom, 20px) + 32px);
+  text-align: center;
+}
+
+/* Wordmark replicating the email header style */
+.reg-wordmark {
+  display: inline-flex;
+  align-items: baseline;
+  margin-bottom: 12px;
+  line-height: 1;
+}
+.reg-word-a {
+  font-size: 42px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.reg-word-b {
+  font-size: 42px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: var(--navy-dark);
+  padding: 0 8px 2px;
+  margin-left: 2px;
+}
+
+.reg-sub {
+  font-size: 15px;
+  font-weight: 400;
+  font-style: italic;
+  color: rgba(238,244,248,0.82);
+  margin-bottom: 28px;
+  line-height: 1.5;
+  letter-spacing: 0.2px;
+}
+
+.reg-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.reg-input {
+  width: 100%;
+  padding: 15px 16px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(10,26,46,0.65);
+  backdrop-filter: blur(8px);
+  color: var(--white);
+  font-family: var(--font);
+  font-size: 16px;
+  font-weight: 400;
+  outline: none;
+  transition: border-color 0.2s;
+  text-align: center;
+}
+.reg-input::placeholder { color: rgba(238,244,248,0.4); }
+.reg-input:focus { border-color: var(--accent); }
+
+.reg-btn {
+  width: 100%;
+  padding: 16px;
+  border-radius: 6px;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.reg-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.12), transparent);
+  pointer-events: none;
+}
+.reg-btn:hover { background: var(--accent-hot); transform: translateY(-1px); box-shadow: 0 4px 20px var(--accent-glow); }
+.reg-btn:active { transform: scale(0.98); }
+
+.reg-skip {
+  background: none;
+  border: none;
+  color: rgba(238,244,248,0.45);
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  cursor: pointer;
+  padding: 8px;
+  transition: color 0.2s;
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+.reg-skip:hover { color: rgba(238,244,248,0.75); }
+
+.reg-privacy {
+  font-size: 11px;
+  color: rgba(238,244,248,0.3);
+  margin-top: 10px;
+  line-height: 1.5;
+}
+
+/* Success state */
+.reg-success {
+  display: none;
+  text-align: center;
+  padding: 10px 0;
+}
+.reg-success-icon { font-size: 40px; margin-bottom: 12px; }
+.reg-success-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.reg-success-msg {
+  font-size: 14px;
+  color: var(--white-dim);
+  font-style: italic;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+@keyframes regFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+#regScreen { animation: regFadeIn 0.6s ease forwards; }
+</style>
+</head>
+<body>
+
+<!-- ── REGISTRATION SCREEN ── -->
+<div id="regScreen" style="display:none">
+  <div class="reg-hero"></div>
+  <div class="reg-hero-overlay"></div>
+  <div class="reg-content">
+
+    <!-- Default form state -->
+    <div id="regFormState">
+      <div class="reg-wordmark">
+        <span class="reg-word-a">INTER</span><span class="reg-word-b">CEDE</span>
+      </div>
+      <p class="reg-sub">A simple app for people who want<br>to pray with purpose</p>
+
+      <div class="reg-form">
+        <input
+          class="reg-input"
+          id="regFirstName"
+          type="text"
+          placeholder="Your first name"
+          autocomplete="given-name"
+          inputmode="text"
+        />
+        <input
+          class="reg-input"
+          id="regEmail"
+          type="email"
+          placeholder="Your email address"
+          autocomplete="email"
+          inputmode="email"
+        />
+        <button class="reg-btn" onclick="submitRegistration()">🏔️ Join Intercede</button>
+      </div>
+
+      <button class="reg-skip" onclick="skipRegistration()">Skip for now →</button>
+      <p class="reg-privacy">No spam. Just occasional resources on faith &amp; prayer.<br>Unsubscribe anytime.</p>
+    </div>
+
+    <!-- Success state -->
+    <div class="reg-success" id="regSuccess">
+      <div class="reg-success-icon">🏔️</div>
+      <div class="reg-success-title">You're In</div>
+      <p class="reg-success-msg">"To pray for someone else is the holy combination<br>of compassion and hope."<br><em>— Tyler Staton</em></p>
+      <button class="reg-btn" onclick="closeRegistration()">Begin Interceding →</button>
+    </div>
+
+  </div>
+</div>
+
+<div id="app">
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="logo-mark">
+      <span class="logo-emoji">🏔️</span>
+      <span class="logo-text">Intercede</span>
+    </div>
+    <div class="music-pod">
+      <span class="music-label">Music</span>
+      <div class="music-btns">
+        <button class="mbtn" id="mbtnOff" onclick="setMusic('off')" style="color:var(--white-dim)">Off</button>
+        <button class="mbtn" id="mbtnClassic" onclick="setMusic('classic')">Hum</button>
+        <button class="mbtn" id="mbtnSigur" onclick="setMusic('sigur')">Atmos</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCROLL AREA -->
+  <div class="scroll-area" id="scrollArea">
+
+    <!-- HOME SCREEN -->
+    <div class="screen active" id="homeScreen">
+      <div class="hero-card">
+        <div class="hero-card-art"></div>
+        <div class="hero-card-content">
+          <div class="hero-tagline">When you say, "I'll pray for you." now you mean it.</div>
+          <div class="hero-title">🏔️ Intercede</div>
+        </div>
+      </div>
+
+      <div class="sect-label">Session Setup</div>
+
+      <div class="rounds-card">
+        <div class="rounds-info">
+          <div class="rounds-title">Rounds of Prayer</div>
+          <div class="rounds-sub">One person per round · 45 seconds each</div>
+        </div>
+        <div class="rounds-ctl">
+          <button class="rnd-btn" onclick="changeRounds(-1)">−</button>
+          <div class="rnd-num" id="roundsDisplay">5</div>
+          <button class="rnd-btn" onclick="changeRounds(1)">+</button>
+        </div>
+      </div>
+
+      <div id="emptyPrompt" class="empty-prompt" style="display:none">
+        <p>Your prayer list is empty.<br><strong>Add names below</strong> to get started.</p>
+      </div>
+
+      <button class="btn-primary" id="startBtn" onclick="startSession()">🏔️ Begin Intercession</button>
+      <button class="btn-ghost" onclick="showScreen('listScreen')">Manage Prayer List</button>
+    </div>
+
+    <!-- LIST SCREEN -->
+    <div class="screen" id="listScreen">
+      <div class="screen-header">
+        <button class="btn-back" onclick="showScreen('homeScreen')">←</button>
+        <div class="screen-title">Prayer List</div>
+        <div class="count-badge" id="countBadge">0</div>
+      </div>
+
+      <div class="add-card">
+        <div class="input-row">
+          <input class="field" id="nameInput" placeholder="Name or person…" maxlength="50" />
+          <button class="btn-add-item" onclick="addPrayer()" title="Add">+</button>
+        </div>
+        <div class="input-row">
+          <input class="field" id="noteInput" placeholder="Prayer request (optional)…" maxlength="120" />
+        </div>
+      </div>
+
+      <div class="prayer-list-wrap">
+        <div id="prayerListEl"><div class="list-empty">No names yet. Add someone above.</div></div>
+      </div>
+    </div>
+
+    <!-- SESSION SCREEN -->
+    <div class="screen" id="prayerScreen">
+      <div class="session-header">
+        <div class="sess-prog-label" id="sessProgLabel">Round 1 of 5</div>
+        <button class="sess-skip" onclick="skipCurrent()">Skip →</button>
+      </div>
+
+      <div class="progress-track" id="progressTrack"></div>
+
+      <div class="name-card">
+        <div class="name-card-label">Praying For</div>
+        <div class="name-card-name" id="currentName">—</div>
+        <div class="name-card-note" id="currentNote"></div>
+      </div>
+
+      <div class="timer-wrap">
+        <svg width="150" height="150" viewBox="0 0 150 150">
+          <circle class="timer-track" cx="75" cy="75" r="64" fill="none" stroke-width="5"/>
+          <circle class="timer-fill" id="timerRing"
+            cx="75" cy="75" r="64" fill="none" stroke-width="5"
+            stroke-dasharray="402.12"
+            stroke-dashoffset="0"/>
+        </svg>
+        <div class="timer-inner">
+          <div class="timer-num" id="timerText">45</div>
+          <div class="timer-unit">Sec</div>
+        </div>
+      </div>
+
+      <div class="sess-status" id="sessStatus">Speaking name…</div>
+      <button class="sess-end" onclick="endSession()">End Session</button>
+    </div>
+
+    <!-- COMPLETE SCREEN -->
+    <div class="screen" id="completeScreen">
+      <div class="complete-icon">🏔️</div>
+      <div class="complete-title">Amen</div>
+      <div class="complete-sub">Mission Accomplished</div>
+      <div class="complete-divider"></div>
+      <div class="complete-msg" id="completeMsg">
+        You showed up. You prayed. That's what dads who lead do.
+      </div>
+      <div class="complete-names" id="completeNames" style="display:none">
+        <div class="complete-names-label">You Prayed For</div>
+        <div id="completePills"></div>
+      </div>
+      <button class="btn-primary" onclick="showScreen('homeScreen')">🏔️ Intercede Again</button>
+      <button class="btn-ghost" onclick="showScreen('listScreen')">Update Prayer List</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ── STATE ──
+let prayers = JSON.parse(localStorage.getItem('bc322_prayers') || '[]');
+let rounds = 5;
+let queue = [];
+let round = 0;
+let timer = null;
+let timerSecs = 45;
+let audioCtx = null;
+let masterGain = null;
+let activeOscillators = [];
+let currentMusic = 'off';
+
+function save() { localStorage.setItem('bc322_prayers', JSON.stringify(prayers)); }
+
+// ── MUSIC ENGINE ──
+function ensureAudio() {
+  if(!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    masterGain = audioCtx.createGain();
+    masterGain.gain.setValueAtTime(0, audioCtx.currentTime);
+    masterGain.connect(audioCtx.destination);
+  }
+  if(audioCtx.state === 'suspended') audioCtx.resume();
+}
+
+function stopMusic() {
+  activeOscillators.forEach(n => { try { n.stop(); } catch(e){} });
+  activeOscillators = [];
+  if(masterGain) {
+    masterGain.gain.cancelScheduledValues(audioCtx.currentTime);
+    masterGain.gain.setValueAtTime(masterGain.gain.value, audioCtx.currentTime);
+    masterGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 1.5);
+  }
+}
+
+function buildClassicDrone() {
+  // D minor: D2, A2, D3, F3, A3, C4 + slow oscillating
+  const t = audioCtx.currentTime;
+  const freqs = [73.42, 110, 146.83, 174.61, 220, 261.63, 293.66];
+  freqs.forEach((f, i) => {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    const lp = audioCtx.createBiquadFilter();
+    osc.type = i < 2 ? 'sawtooth' : 'sine';
+    osc.frequency.value = f;
+    // Slow vibrato
+    const lfo = audioCtx.createOscillator();
+    const lfoGain = audioCtx.createGain();
+    lfo.frequency.value = 0.05 + i * 0.03;
+    lfoGain.gain.value = 0.8;
+    lfo.connect(lfoGain);
+    lfoGain.connect(osc.frequency);
+    lfo.start(t);
+    activeOscillators.push(lfo);
+
+    lp.type = 'lowpass';
+    lp.frequency.value = 600 + i * 80;
+    lp.Q.value = 0.8;
+    gain.gain.value = 0.04 - i * 0.003;
+
+    osc.connect(lp); lp.connect(gain); gain.connect(masterGain);
+    osc.start(t);
+    activeOscillators.push(osc);
+  });
+
+  // Slow cathedral pulse (every ~8s)
+  const pulseOsc = audioCtx.createOscillator();
+  const pulseGain = audioCtx.createGain();
+  const pulseLFO = audioCtx.createOscillator();
+  const pulseLFOGain = audioCtx.createGain();
+  pulseOsc.frequency.value = 146.83; // D3
+  pulseOsc.type = 'sine';
+  pulseLFO.frequency.value = 0.08;
+  pulseLFOGain.gain.value = 0.06;
+  pulseLFO.connect(pulseLFOGain);
+  pulseLFOGain.connect(pulseGain.gain);
+  pulseGain.gain.setValueAtTime(0, t);
+  pulseOsc.connect(pulseGain); pulseGain.connect(masterGain);
+  pulseOsc.start(t); pulseLFO.start(t);
+  activeOscillators.push(pulseOsc, pulseLFO);
+
+  masterGain.gain.cancelScheduledValues(t);
+  masterGain.gain.setValueAtTime(0, t);
+  masterGain.gain.linearRampToValueAtTime(0.22, t + 4);
+}
+
+function buildSigurRos() {
+  // Sigur Rós style: high overtone pads, slow bow-like swells, reverb-like delay
+  const t = audioCtx.currentTime;
+  // Hopelandic-inspired: Eb major (enharmonic resonance) — E2, B2, E3, G#3, B3
+  const freqsBase = [82.41, 123.47, 164.81, 207.65, 246.94, 329.63, 415.30];
+
+  freqsBase.forEach((f, i) => {
+    const osc = audioCtx.createOscillator();
+    const osc2 = audioCtx.createOscillator(); // slight detune for width
+    const gain = audioCtx.createGain();
+    const lp = audioCtx.createBiquadFilter();
+    const rev = audioCtx.createConvolver();
+
+    osc.type = 'triangle';
+    osc2.type = 'sine';
+    osc.frequency.value = f;
+    osc2.frequency.value = f * 1.003; // slight detune
+
+    // Slow swell LFO
+    const lfo = audioCtx.createOscillator();
+    const lfoG = audioCtx.createGain();
+    lfo.frequency.value = 0.03 + i * 0.015;
+    lfoG.gain.value = 0.02 + (i < 3 ? 0.04 : 0.01);
+    lfo.connect(lfoG); lfoG.connect(gain.gain);
+    lfo.start(t); activeOscillators.push(lfo);
+
+    lp.type = 'lowpass';
+    lp.frequency.value = 1200 - i * 80;
+    lp.Q.value = 1.5;
+
+    gain.gain.setValueAtTime(0.025 - i * 0.002, t);
+
+    osc.connect(lp); osc2.connect(lp); lp.connect(gain); gain.connect(masterGain);
+    osc.start(t); osc2.start(t);
+    activeOscillators.push(osc, osc2);
+  });
+
+  // Ethereal high shimmer (bowed glass effect)
+  [1318.51, 987.77, 1174.66].forEach((f, i) => {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    const lfo = audioCtx.createOscillator();
+    const lfoG = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = f;
+    lfo.frequency.value = 0.12 + i * 0.05;
+    lfoG.gain.value = 0.008;
+    lfo.connect(lfoG); lfoG.connect(gain.gain);
+    gain.gain.setValueAtTime(0.012 - i * 0.003, t);
+    osc.connect(gain); gain.connect(masterGain);
+    osc.start(t); lfo.start(t);
+    activeOscillators.push(osc, lfo);
+  });
+
+  // Slow resonant "bow" sweep
+  const bowOsc = audioCtx.createOscillator();
+  const bowGain = audioCtx.createGain();
+  const bowLFO = audioCtx.createOscillator();
+  const bowLFOG = audioCtx.createGain();
+  bowOsc.type = 'sawtooth';
+  bowOsc.frequency.value = 164.81;
+  const hp = audioCtx.createBiquadFilter();
+  hp.type = 'highpass'; hp.frequency.value = 400;
+  bowLFO.frequency.value = 0.04;
+  bowLFOG.gain.value = 0.05;
+  bowLFO.connect(bowLFOG); bowLFOG.connect(bowGain.gain);
+  bowGain.gain.setValueAtTime(0.03, t);
+  bowOsc.connect(hp); hp.connect(bowGain); bowGain.connect(masterGain);
+  bowOsc.start(t); bowLFO.start(t);
+  activeOscillators.push(bowOsc, bowLFO);
+
+  masterGain.gain.cancelScheduledValues(t);
+  masterGain.gain.setValueAtTime(0, t);
+  masterGain.gain.linearRampToValueAtTime(0.18, t + 5);
+}
+
+function setMusic(mode) {
+  ensureAudio();
+  stopMusic();
+  currentMusic = mode;
+
+  document.querySelectorAll('.mbtn').forEach(b => b.classList.remove('active'));
+  document.getElementById('mbtn' + (mode === 'off' ? 'Off' : mode === 'classic' ? 'Classic' : 'Sigur')).classList.add('active');
+
+  setTimeout(() => {
+    if(mode === 'classic') buildClassicDrone();
+    if(mode === 'sigur') buildSigurRos();
+  }, 400);
+}
+
+// Mark "Off" active by default
+document.getElementById('mbtnOff').classList.add('active');
+
+// ── CLOSING SEQUENCE: soft bell + spoken Amen ──
+function playClosingSequence(onDone) {
+  try {
+    const c = new (window.AudioContext || window.webkitAudioContext)();
+
+    // Soft bell — gentle sine wave with slow decay, like a meditation bowl
+    function playBell(freq, startTime, duration, volume) {
+      const osc  = c.createOscillator();
+      const gain = c.createGain();
+      // Add a subtle second partial for richness
+      const osc2  = c.createOscillator();
+      const gain2 = c.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0, startTime);
+      gain.gain.linearRampToValueAtTime(volume, startTime + 0.04);
+      gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+
+      osc2.type = 'sine';
+      osc2.frequency.value = freq * 2.756; // inharmonic partial for bell character
+      gain2.gain.setValueAtTime(0, startTime);
+      gain2.gain.linearRampToValueAtTime(volume * 0.3, startTime + 0.02);
+      gain2.gain.exponentialRampToValueAtTime(0.001, startTime + duration * 0.4);
+
+      osc.connect(gain);   gain.connect(c.destination);
+      osc2.connect(gain2); gain2.connect(c.destination);
+      osc.start(startTime);  osc.stop(startTime + duration);
+      osc2.start(startTime); osc2.stop(startTime + duration);
+    }
+
+    // Single soft bell strike at A4 (440Hz) — calm, not jarring
+    playBell(440, c.currentTime, 4.5, 0.22);
+
+    // After ~2 seconds, speak "Amen" in a calm female voice
+    setTimeout(() => {
+      const u = new SpeechSynthesisUtterance('Amen');
+      u.rate  = 0.7;   // slow and deliberate
+      u.pitch = 0.9;   // slightly lower, reverent
+      u.volume = 0.9;
+
+      // Try to select a female voice
+      const voices = speechSynthesis.getVoices();
+      const femaleVoice = voices.find(v =>
+        /samantha|karen|victoria|moira|fiona|female|woman|zira|hazel/i.test(v.name)
+      ) || voices.find(v =>
+        v.lang.startsWith('en') && v.name.toLowerCase().includes('f')
+      ) || voices.find(v => v.lang.startsWith('en'));
+
+      if(femaleVoice) u.voice = femaleVoice;
+
+      u.onend   = () => { if(onDone) onDone(); };
+      u.onerror = () => { if(onDone) onDone(); };
+      speechSynthesis.cancel();
+      speechSynthesis.speak(u);
+    }, 1800);
+
+  } catch(e) {
+    // Fallback: just speak Amen if audio context fails
+    const u = new SpeechSynthesisUtterance('Amen');
+    u.rate = 0.7; u.pitch = 0.9;
+    u.onend = u.onerror = () => { if(onDone) onDone(); };
+    speechSynthesis.cancel();
+    speechSynthesis.speak(u);
+  }
+}
+
+// ── SCREENS ──
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => {
+    s.classList.remove('active');
+    s.style.display = 'none';
+  });
+  const el = document.getElementById(id);
+  el.style.display = 'block';
+  requestAnimationFrame(() => el.classList.add('active'));
+  document.getElementById('scrollArea').scrollTop = 0;
+  if(id === 'listScreen') renderList();
+  if(id === 'homeScreen') updateHome();
+}
+
+function updateHome() {
+  const has = prayers.length > 0;
+  document.getElementById('emptyPrompt').style.display = has ? 'none' : 'block';
+  document.getElementById('startBtn').disabled = !has;
+}
+
+// ── LIST ──
+function renderList() {
+  document.getElementById('countBadge').textContent = prayers.length;
+  const el = document.getElementById('prayerListEl');
+  if(!prayers.length) {
+    el.innerHTML = '<div class="list-empty">No names yet. Add someone above.</div>';
+    return;
+  }
+  el.innerHTML = prayers.map((p,i) => `
+    <div class="prayer-item">
+      <div class="prayer-dot"></div>
+      <div class="prayer-text">
+        <div class="prayer-name">${esc(p.name)}</div>
+        ${p.note ? `<div class="prayer-note">${esc(p.note)}</div>` : ''}
+      </div>
+      <button class="btn-remove" onclick="del(${i})">✕</button>
+    </div>`).join('');
+}
+
+function addPrayer() {
+  const name = document.getElementById('nameInput').value.trim();
+  const note = document.getElementById('noteInput').value.trim();
+  if(!name) { document.getElementById('nameInput').focus(); return; }
+  prayers.push({name, note});
+  save();
+  document.getElementById('nameInput').value = '';
+  document.getElementById('noteInput').value = '';
+  renderList();
+}
+
+function del(i) { prayers.splice(i,1); save(); renderList(); }
+
+document.getElementById('nameInput').addEventListener('keydown', e => {
+  if(e.key === 'Enter') document.getElementById('noteInput').focus();
+});
+document.getElementById('noteInput').addEventListener('keydown', e => {
+  if(e.key === 'Enter') addPrayer();
+});
+
+function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ── ROUNDS ──
+function changeRounds(d) {
+  rounds = Math.min(10, Math.max(1, rounds+d));
+  document.getElementById('roundsDisplay').textContent = rounds;
+}
+
+// ── SESSION ──
+function buildQueue() {
+  const q = [];
+  for(let i=0;i<rounds;i++) q.push(prayers[Math.floor(Math.random()*prayers.length)]);
+  return q;
+}
+
+function buildProgressBars() {
+  document.getElementById('progressTrack').innerHTML =
+    Array.from({length:rounds},(_,i)=>`<div class="pbar" id="pbar${i}"></div>`).join('');
+}
+
+function updateBars() {
+  for(let i=0;i<rounds;i++) {
+    const b = document.getElementById(`pbar${i}`);
+    if(!b) continue;
+    b.className = 'pbar';
+    if(i<round) b.classList.add('done');
+    else if(i===round) b.classList.add('active');
+  }
+}
+
+function startSession() {
+  if(!prayers.length) return;
+  queue = buildQueue();
+  round = 0;
+  buildProgressBars();
+  showScreen('prayerScreen');
+  doRound();
+}
+
+function doRound() {
+  if(round >= rounds) { finish(); return; }
+  const p = queue[round];
+  document.getElementById('sessProgLabel').textContent = `Round ${round+1} of ${rounds}`;
+
+  // Reanimate name card
+  const nm = document.getElementById('currentName');
+  nm.style.animation = 'none'; nm.offsetHeight; nm.style.animation = '';
+  nm.textContent = p.name;
+  document.getElementById('currentNote').textContent = p.note || '';
+  updateBars();
+
+  document.getElementById('sessStatus').textContent = 'Speaking name…';
+
+  const u = new SpeechSynthesisUtterance(p.note ? `${p.name}. ${p.note}` : p.name);
+  u.rate = 0.85; u.pitch = 1;
+  u.onend = () => startCountdown();
+  u.onerror = () => startCountdown();
+  speechSynthesis.cancel();
+  speechSynthesis.speak(u);
+}
+
+function startCountdown() {
+  timerSecs = 45;
+  updateTimer();
+  document.getElementById('sessStatus').textContent = 'Pray for them now…';
+  const circumf = 402.12;
+  clearInterval(timer);
+  timer = setInterval(() => {
+    timerSecs--;
+    updateTimer();
+    document.getElementById('timerRing').style.strokeDashoffset =
+      circumf * (1 - timerSecs / 45);
+    if(timerSecs <= 0) {
+      clearInterval(timer);
+      document.getElementById('timerRing').style.strokeDashoffset = circumf;
+      nextRound();
+    }
+  }, 1000);
+}
+
+function updateTimer() {
+  document.getElementById('timerText').textContent = timerSecs;
+}
+
+function nextRound() {
+  round++;
+  if(round >= rounds) { setTimeout(finish, 800); }
+  else { document.getElementById('sessStatus').textContent = 'Moving on…'; setTimeout(doRound, 1200); }
+}
+
+function skipCurrent() {
+  clearInterval(timer);
+  speechSynthesis.cancel();
+  nextRound();
+}
+
+function endSession() {
+  clearInterval(timer);
+  speechSynthesis.cancel();
+  showScreen('homeScreen');
+}
+
+function finish() {
+  clearInterval(timer);
+  speechSynthesis.cancel();
+
+  // Prepare completion screen content first
+  const prayed = queue.slice(0, round);
+  const names = [...new Set(prayed.map(p=>p.name))];
+  document.getElementById('completeMsg').textContent =
+    '"To pray for someone else is the holy combination of compassion and hope." — Tyler Staton';
+
+  if(names.length) {
+    document.getElementById('completePills').innerHTML = names.map(n=>`<span class="complete-name-pill">${esc(n)}</span>`).join('');
+    document.getElementById('completeNames').style.display = 'block';
+  }
+
+  // Show status update on session screen
+  document.getElementById('sessStatus').textContent = 'Session complete…';
+
+  // Play bell then Amen, then navigate to complete screen
+  playClosingSequence(() => {
+    setTimeout(() => showScreen('completeScreen'), 600);
+  });
+}
+
+updateHome();
+
+// ── REGISTRATION ──
+// Replace this URL with your real Zapier webhook URL when ready
+const ZAPIER_WEBHOOK = 'https://hooks.zapier.com/hooks/catch/8373891/u05pyl5/';
+
+function initRegistration() {
+  const status = localStorage.getItem('intercede_reg');
+  if(status === 'done' || status === 'skipped') return;
+  document.getElementById('regScreen').style.display = 'flex';
+}
+
+function submitRegistration() {
+  const firstName = document.getElementById('regFirstName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+
+  if(!firstName) {
+    const f = document.getElementById('regFirstName');
+    f.style.borderColor = 'rgba(255,100,100,0.7)';
+    f.focus();
+    setTimeout(() => f.style.borderColor = '', 1500);
+    return;
+  }
+  if(!email || !email.includes('@')) {
+    const f = document.getElementById('regEmail');
+    f.style.borderColor = 'rgba(255,100,100,0.7)';
+    f.focus();
+    setTimeout(() => f.style.borderColor = '', 1500);
+    return;
+  }
+
+  const btn = document.querySelector('#regFormState .reg-btn');
+  btn.textContent = 'Sending…';
+  btn.disabled = true;
+
+  fetch(ZAPIER_WEBHOOK, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      first_name: firstName,
+      email: email,
+      source: 'Intercede App',
+      tag: 'Intercede',
+      timestamp: new Date().toISOString()
+    })
+  })
+  .then(() => {
+    localStorage.setItem('intercede_reg', 'done');
+    localStorage.setItem('intercede_email', email);
+    localStorage.setItem('intercede_name', firstName);
+    showRegSuccess();
+  })
+  .catch(() => {
+    localStorage.setItem('intercede_reg', 'done');
+    showRegSuccess();
+  });
+}
+
+function showRegSuccess() {
+  document.getElementById('regFormState').style.display = 'none';
+  document.getElementById('regSuccess').style.display = 'block';
+}
+
+function skipRegistration() {
+  localStorage.setItem('intercede_reg', 'skipped');
+  closeRegistration();
+}
+
+function closeRegistration() {
+  const el = document.getElementById('regScreen');
+  el.style.transition = 'opacity 0.5s ease';
+  el.style.opacity = '0';
+  setTimeout(() => { el.style.display = 'none'; }, 500);
+}
+
+document.getElementById('regFirstName').addEventListener('keydown', e => {
+  if(e.key === 'Enter') document.getElementById('regEmail').focus();
+});
+document.getElementById('regEmail').addEventListener('keydown', e => {
+  if(e.key === 'Enter') submitRegistration();
+});
+
+initRegistration();
+</script>
+</body>
+</html>
